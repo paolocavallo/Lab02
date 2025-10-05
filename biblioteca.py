@@ -1,21 +1,61 @@
 def carica_da_file(file_path):
     """Carica i libri dal file"""
-    # TODO
+    try:
+        input_file = open(file_path, "r", encoding="utf-8")
+        import csv
+        from csv import reader
+        reader = csv.reader(input_file)
+        input_file.readline()
+        dizionario = {}
+        for riga in reader:
+            dizionario[riga[0]] = riga[1:]
+        input_file.close()
+        return dizionario
+    except FileNotFoundError:
+        return None
 
 
 def aggiungi_libro(biblioteca, titolo, autore, anno, pagine, sezione, file_path):
     """Aggiunge un libro nella biblioteca"""
-    # TODO
+    import csv
+    file = open(file_path, "a", newline="", encoding="utf-8")
+    if sezione > 5 or sezione < 0:
+        return None
+    elif titolo in biblioteca:
+        return None
+    try:
+        biblioteca.update({titolo: [autore, anno, pagine, sezione]})
+        writer = csv.writer(file)
+        dati = [titolo, autore, anno, pagine, sezione]
+        writer.writerow([titolo, autore, anno, pagine, sezione])
+        return True
+    except FileNotFoundError:
+        return None
+    file.close()
 
 
 def cerca_libro(biblioteca, titolo):
     """Cerca un libro nella biblioteca dato il titolo"""
-    # TODO
+    if titolo not in biblioteca:
+        return None
+    else:
+        libro = [titolo, biblioteca[titolo]]
+        stringa = ""
+        for i in biblioteca[titolo]:
+            stringa = stringa + str(i) + ', '
+        return stringa.strip(", ")
 
 
 def elenco_libri_sezione_per_titolo(biblioteca, sezione):
     """Ordina i titoli di una data sezione della biblioteca in ordine alfabetico"""
-    # TODO
+    lista = []
+    if sezione > 5 or sezione < 0:
+        return None
+    for i in biblioteca:
+        if int(biblioteca[i][3]) == sezione:
+            lista.append(i)
+    lista_ord = sorted(lista)
+    return lista_ord
 
 
 def main():
